@@ -1,12 +1,44 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
+import { Global, css } from '@emotion/react';
 import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 
+const globalStyles = css`
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+      'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+      sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    background-color: #f5f5f5;
+  }
+
+  a {
+    text-decoration: none;
+    color: inherit;
+  }
+
+  button {
+    cursor: pointer;
+  }
+
+  ul {
+    list-style: none;
+  }
+`;
+
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
+    <Global styles={globalStyles} />
     <App />
   </React.StrictMode>
 );
