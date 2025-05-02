@@ -1,34 +1,31 @@
 import React, { useState } from 'react';
-import {
-  HeaderContainer,
-  Nav,
-  NavLink,
-  ProfileDropdown,
-  DropdownButton,
-  DropdownContent
-} from '../styles/components/HeaderStyles';
+import { Link } from 'react-router-dom';
+import '../styles/components/HeaderStyles.css';
 
 const Header = () => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
   return (
-    <HeaderContainer>
-      <Nav>
-        <NavLink to="/">Главная</NavLink>
-        <NavLink to="/catalog">Каталог</NavLink>
-        <NavLink to="/about">О нас</NavLink>
-      </Nav>
-      <ProfileDropdown>
-        <DropdownButton onClick={() => setIsDropdownOpen(!isDropdownOpen)}>
+    <header className="header-container">
+      <nav className="nav">
+        <Link to="/" className="nav-link">Главная</Link>
+        <Link to="/catalog" className="nav-link">Каталог</Link>
+        <Link to="/about" className="nav-link">О нас</Link>
+      </nav>
+      <div className="profile-dropdown">
+        <button 
+          className="dropdown-button"
+          onClick={() => setIsDropdownOpen(!isDropdownOpen)}
+        >
           Профиль
-        </DropdownButton>
-        <DropdownContent isOpen={isDropdownOpen}>
-          <NavLink to="/profile">Мой профиль</NavLink>
-          <NavLink to="/settings">Настройки</NavLink>
-          <NavLink to="/logout">Выйти</NavLink>
-        </DropdownContent>
-      </ProfileDropdown>
-    </HeaderContainer>
+        </button>
+        <div className={`dropdown-content ${isDropdownOpen ? 'is-open' : ''}`}>
+          <Link to="/profile" className="nav-link">Мой профиль</Link>
+          <Link to="/settings" className="nav-link">Настройки</Link>
+          <Link to="/logout" className="nav-link">Выйти</Link>
+        </div>
+      </div>
+    </header>
   );
 };
 

@@ -1,6 +1,4 @@
-import styled from '@emotion/styled';
-
-export const ModalOverlay = styled.div`
+.modal-overlay {
   position: fixed;
   top: 0;
   left: 0;
@@ -11,9 +9,9 @@ export const ModalOverlay = styled.div`
   justify-content: center;
   align-items: center;
   z-index: 1000;
-`;
+}
 
-export const ModalContent = styled.div`
+.modal-content {
   background-color: white;
   padding: 2rem;
   border-radius: 8px;
@@ -22,20 +20,20 @@ export const ModalContent = styled.div`
   overflow-y: auto;
   position: relative;
   animation: modalFadeIn 0.3s ease-in-out;
+}
 
-  @keyframes modalFadeIn {
-    from {
-      opacity: 0;
-      transform: translateY(-20px);
-    }
-    to {
-      opacity: 1;
-      transform: translateY(0);
-    }
+@keyframes modalFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
   }
-`;
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
 
-export const CloseButton = styled.button`
+.modal-close-button {
   position: absolute;
   top: 1rem;
   right: 1rem;
@@ -45,8 +43,8 @@ export const CloseButton = styled.button`
   cursor: pointer;
   color: #666;
   transition: color 0.3s;
+}
 
-  &:hover {
-    color: #333;
-  }
-`; 
+.modal-close-button:hover {
+  color: #333;
+} 

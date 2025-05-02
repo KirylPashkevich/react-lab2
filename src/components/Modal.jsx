@@ -1,20 +1,16 @@
 import React from 'react';
-import {
-  ModalOverlay,
-  ModalContent,
-  CloseButton
-} from '../styles/components/ModalStyles';
+import '../styles/pages/ModalStyles.css';
 
 const Modal = ({ isOpen, onClose, children }) => {
   if (!isOpen) return null;
 
   return (
-    <ModalOverlay onClick={onClose}>
-      <ModalContent onClick={e => e.stopPropagation()}>
-        <CloseButton onClick={onClose}>&times;</CloseButton>
+    <div className="modal-overlay" onClick={onClose}>
+      <div className="modal-content" onClick={e => e.stopPropagation()}>
+        <button className="modal-close-button" onClick={onClose}>&times;</button>
         {children}
-      </ModalContent>
-    </ModalOverlay>
+      </div>
+    </div>
   );
 };
 
