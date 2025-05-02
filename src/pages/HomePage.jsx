@@ -1,40 +1,34 @@
 import React from 'react';
-import {
-  HomeContainer,
-  HeroSection,
-  SectionTitle,
-  Button,
-  FeaturesGrid,
-  FeatureCard
-} from '../styles/pages/HomePageStyles';
+import { Link } from 'react-router-dom';
+import '../styles/pages/HomePageStyles.css';
 
 const HomePage = () => {
   return (
-    <HomeContainer>
-      <HeroSection>
-        <SectionTitle>Добро пожаловать в наш магазин</SectionTitle>
+    <div className="home-container">
+      <section className="hero-section">
+        <h2 className="section-title">Добро пожаловать в наш магазин</h2>
         <p>Лучшие товары по лучшим ценам</p>
-        <Button to="/catalog">Перейти в каталог</Button>
-      </HeroSection>
+        <Link to="/catalog" className="home-button">Перейти в каталог</Link>
+      </section>
 
       <section>
-        <SectionTitle>Наши преимущества</SectionTitle>
-        <FeaturesGrid>
-          <FeatureCard>
+        <h2 className="section-title">Наши преимущества</h2>
+        <div className="features-grid">
+          <div className="feature-card">
             <h3>Качество</h3>
             <p>Мы предлагаем только качественные товары от проверенных производителей</p>
-          </FeatureCard>
-          <FeatureCard>
+          </div>
+          <div className="feature-card">
             <h3>Доставка</h3>
             <p>Быстрая и надежная доставка по всей стране</p>
-          </FeatureCard>
-          <FeatureCard>
+          </div>
+          <div className="feature-card">
             <h3>Поддержка</h3>
             <p>Квалифицированная поддержка клиентов 24/7</p>
-          </FeatureCard>
-        </FeaturesGrid>
+          </div>
+        </div>
       </section>
-    </HomeContainer>
+    </div>
   );
 };
 
