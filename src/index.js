@@ -1,7 +1,10 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import { Global, css } from '@emotion/react';
+import { Provider } from 'react-redux';
+import { store } from './store';
 import 'bootstrap/dist/js/bootstrap.bundle.min.js';
+import './i18n';
 import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
@@ -39,8 +42,10 @@ const globalStyles = css`
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
-    <Global styles={globalStyles} />
-    <App />
+    <Provider store={store}>
+      <Global styles={globalStyles} />
+      <App />
+    </Provider>
   </React.StrictMode>
 );
 
