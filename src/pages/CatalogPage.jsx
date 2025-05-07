@@ -1,13 +1,29 @@
 import React, { useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import Modal from '../components/Modal';
-import productsData from '../data/products.json';
 import 'bootstrap/dist/css/bootstrap.min.css';
+import {
+  selectFilteredProducts,
+  selectSelectedCategory,
+  selectSelectedProducts,
+  addProduct,
+  updateProduct,
+  deleteProduct,
+  deleteSelectedProducts,
+  setSelectedCategory,
+  toggleProductSelection
+} from '../store/slices/productsSlice';
+import { selectAllCategories } from '../store/slices/categoriesSlice';
+import { useTranslation } from 'react-i18next';
 
 const CatalogPage = () => {
-  const [products, setProducts] = useState(productsData.products);
-  const [selectedCategory, setSelectedCategory] = useState('all');
+  const { t } = useTranslation();
+  const dispatch = useDispatch();
+  const products = useSelector(selectFilteredProducts);
+  const selectedCategory = useSelector(selectSelectedCategory);
+  const selectedProducts = useSelector(selectSelectedProducts);
+  const categories = useSelector(selectAllCategories);
   const [selectedProduct, setSelectedProduct] = useState(null);
-  const [selectedProducts, setSelectedProducts] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isEditMode, setIsEditMode] = useState(false);
   const [newProduct, setNewProduct] = useState({
@@ -18,35 +34,21 @@ const CatalogPage = () => {
     image: ''
   });
 
-  const categories = ['all', ...new Set(productsData.products.map(p => p.category))];
-
-  const filteredProducts = selectedCategory === 'all'
-    ? products
-    : products.filter(product => product.category === selectedCategory);
-
   const handleProductClick = (product) => {
     setSelectedProduct(product);
     setIsModalOpen(true);
   };
 
   const handleProductSelect = (productId) => {
-    setSelectedProducts(prev => {
-      if (prev.includes(productId)) {
-        return prev.filter(id => id !== productId);
-      } else {
-        return [...prev, productId];
-      }
-    });
+    dispatch(toggleProductSelection(productId));
   };
 
   const handleDeleteProducts = () => {
-    setProducts(prev => prev.filter(product => !selectedProducts.includes(product.id)));
-    setSelectedProducts([]);
+    dispatch(deleteSelectedProducts());
   };
 
   const handleAddProduct = () => {
-    const newId = Math.max(...products.map(p => p.id)) + 1;
-    setProducts(prev => [...prev, { ...newProduct, id: newId }]);
+    dispatch(addProduct(newProduct));
     setNewProduct({
       name: '',
       description: '',
@@ -57,43 +59,51 @@ const CatalogPage = () => {
   };
 
   const handleEditProduct = (updatedProduct) => {
-    setProducts(prev => prev.map(p => 
-      p.id === updatedProduct.id ? updatedProduct : p
-    ));
+    dispatch(updateProduct(updatedProduct));
     setIsEditMode(false);
     setSelectedProduct(null);
+    setIsModalOpen(false);
   };
 
   return (
     <div className="container py-5">
-      <h2 className="display-4 mb-4">Каталог товаров</h2>
+      <h2 className="display-4 mb-4">{t('products.title')}</h2>
       
-      <div className="btn-group mb-4" role="group">
-        {categories.map(category => (
-          <button
-            key={category}
-            className={`btn ${selectedCategory === category ? 'btn-primary' : 'btn-outline-primary'}`}
-            onClick={() => setSelectedCategory(category)}
-          >
-            {category}
-          </button>
-        ))}
-      </div>
-
-      {selectedProducts.length > 0 && (
-        <div className="mb-4">
-          <button 
-            className="btn btn-danger"
-            onClick={handleDeleteProducts}
-          >
-            Удалить выбранные ({selectedProducts.length})
-          </button>
+      <div className="row mb-4">
+        <div className="col-md-8">
+          <div className="btn-group" role="group">
+            <button
+              className={`btn ${selectedCategory === 'all' ? 'btn-primary' : 'btn-outline-primary'}`}
+              onClick={() => dispatch(setSelectedCategory('all'))}
+            >
+              {t('common.all')}
+            </button>
+            {categories.map(category => (
+              <button
+                key={category.id}
+                className={`btn ${selectedCategory === category.name ? 'btn-primary' : 'btn-outline-primary'}`}
+                onClick={() => dispatch(setSelectedCategory(category.name))}
+              >
+                {category.name}
+              </button>
+            ))}
+          </div>
         </div>
-      )}
+        <div className="col-md-4 text-end">
+          {selectedProducts.length > 0 && (
+            <button 
+              className="btn btn-danger"
+              onClick={handleDeleteProducts}
+            >
+              {t('common.delete')} ({selectedProducts.length})
+            </button>
+          )}
+        </div>
+      </div>
 
       <div className="card mb-4">
         <div className="card-header">
-          <h3 className="h5 mb-0">Добавить новый товар</h3>
+          <h3 className="h5 mb-0">{t('products.addProduct')}</h3>
         </div>
         <div className="card-body">
           <div className="row g-3">
@@ -101,7 +111,7 @@ const CatalogPage = () => {
               <input
                 type="text"
                 className="form-control"
-                placeholder="Название"
+                placeholder={t('common.name')}
                 value={newProduct.name}
                 onChange={(e) => setNewProduct({ ...newProduct, name: e.target.value })}
               />
@@ -110,7 +120,7 @@ const CatalogPage = () => {
               <input
                 type="text"
                 className="form-control"
-                placeholder="Описание"
+                placeholder={t('common.description')}
                 value={newProduct.description}
                 onChange={(e) => setNewProduct({ ...newProduct, description: e.target.value })}
               />
@@ -119,25 +129,30 @@ const CatalogPage = () => {
               <input
                 type="number"
                 className="form-control"
-                placeholder="Цена"
+                placeholder={t('common.price')}
                 value={newProduct.price}
                 onChange={(e) => setNewProduct({ ...newProduct, price: e.target.value })}
               />
             </div>
             <div className="col-md-4">
-              <input
-                type="text"
-                className="form-control"
-                placeholder="Категория"
+              <select
+                className="form-select"
                 value={newProduct.category}
                 onChange={(e) => setNewProduct({ ...newProduct, category: e.target.value })}
-              />
+              >
+                <option value="">{t('common.selectCategory')}</option>
+                {categories.map(category => (
+                  <option key={category.id} value={category.name}>
+                    {category.name}
+                  </option>
+                ))}
+              </select>
             </div>
             <div className="col-md-4">
               <input
                 type="text"
                 className="form-control"
-                placeholder="URL изображения"
+                placeholder={t('common.imageUrl')}
                 value={newProduct.image}
                 onChange={(e) => setNewProduct({ ...newProduct, image: e.target.value })}
               />
@@ -147,7 +162,7 @@ const CatalogPage = () => {
                 className="btn btn-primary"
                 onClick={handleAddProduct}
               >
-                Добавить товар
+                {t('products.addProduct')}
               </button>
             </div>
           </div>
@@ -155,7 +170,7 @@ const CatalogPage = () => {
       </div>
 
       <div className="row row-cols-1 row-cols-md-3 g-4">
-        {filteredProducts.map(product => (
+        {products.map(product => (
           <div key={product.id} className="col">
             <div 
               className={`card h-100 ${selectedProducts.includes(product.id) ? 'border-primary' : ''}`}
@@ -180,7 +195,8 @@ const CatalogPage = () => {
               />
               <div className="card-body">
                 <h5 className="card-title">{product.name}</h5>
-                <p className="card-text text-primary fw-bold">{product.price} руб.</p>
+                <p className="card-text text-primary fw-bold">{product.price} {t('common.currency')}</p>
+                <p className="card-text text-muted">{product.category}</p>
               </div>
             </div>
           </div>
@@ -192,6 +208,7 @@ const CatalogPage = () => {
         onClose={() => {
           setIsModalOpen(false);
           setIsEditMode(false);
+          setSelectedProduct(null);
         }}
         title={selectedProduct?.name}
       >
@@ -200,7 +217,7 @@ const CatalogPage = () => {
             {isEditMode ? (
               <div className="row g-3">
                 <div className="col-md-6">
-                  <label className="form-label">Название</label>
+                  <label className="form-label">{t('common.name')}</label>
                   <input
                     type="text"
                     className="form-control"
@@ -209,7 +226,7 @@ const CatalogPage = () => {
                   />
                 </div>
                 <div className="col-md-6">
-                  <label className="form-label">Описание</label>
+                  <label className="form-label">{t('common.description')}</label>
                   <input
                     type="text"
                     className="form-control"
@@ -218,7 +235,7 @@ const CatalogPage = () => {
                   />
                 </div>
                 <div className="col-md-4">
-                  <label className="form-label">Цена</label>
+                  <label className="form-label">{t('common.price')}</label>
                   <input
                     type="number"
                     className="form-control"
@@ -227,16 +244,21 @@ const CatalogPage = () => {
                   />
                 </div>
                 <div className="col-md-4">
-                  <label className="form-label">Категория</label>
-                  <input
-                    type="text"
-                    className="form-control"
+                  <label className="form-label">{t('common.category')}</label>
+                  <select
+                    className="form-select"
                     value={selectedProduct.category}
                     onChange={(e) => setSelectedProduct({ ...selectedProduct, category: e.target.value })}
-                  />
+                  >
+                    {categories.map(category => (
+                      <option key={category.id} value={category.name}>
+                        {category.name}
+                      </option>
+                    ))}
+                  </select>
                 </div>
                 <div className="col-md-4">
-                  <label className="form-label">URL изображения</label>
+                  <label className="form-label">{t('common.imageUrl')}</label>
                   <input
                     type="text"
                     className="form-control"
@@ -249,25 +271,30 @@ const CatalogPage = () => {
                     className="btn btn-primary"
                     onClick={() => handleEditProduct(selectedProduct)}
                   >
-                    Сохранить изменения
+                    {t('common.save')}
                   </button>
                 </div>
               </div>
             ) : (
               <div>
-                <img 
-                  src={selectedProduct.image} 
-                  alt={selectedProduct.name} 
-                  className="img-fluid rounded mb-3"
-                />
-                <p className="lead">{selectedProduct.description}</p>
-                <p className="h4 text-primary mb-3">Цена: {selectedProduct.price} руб.</p>
-                <p className="text-muted">Категория: {selectedProduct.category}</p>
+                <p className="mb-3">{selectedProduct.description}</p>
+                <p className="text-primary fw-bold mb-3">{selectedProduct.price} {t('common.currency')}</p>
+                <p className="text-muted mb-3">{t('common.category')}: {selectedProduct.category}</p>
                 <button 
-                  className="btn btn-primary"
+                  className="btn btn-primary me-2"
                   onClick={() => setIsEditMode(true)}
                 >
-                  Редактировать
+                  {t('common.edit')}
+                </button>
+                <button 
+                  className="btn btn-danger"
+                  onClick={() => {
+                    dispatch(deleteProduct(selectedProduct.id));
+                    setIsModalOpen(false);
+                    setSelectedProduct(null);
+                  }}
+                >
+                  {t('common.delete')}
                 </button>
               </div>
             )}

@@ -28,7 +28,10 @@ const ruTranslations = {
     required: 'Обязательное поле',
     minLength: 'Минимум {{count}} символов',
     positiveNumber: 'Должно быть положительным числом',
-    duplicateName: 'Элемент с таким названием уже существует'
+    duplicateName: 'Элемент с таким названием уже существует',
+    selectCategory: 'Выберите категорию',
+    imageUrl: 'URL изображения',
+    currency: 'руб.'
   },
   products: {
     title: 'Каталог товаров',
@@ -43,7 +46,8 @@ const ruTranslations = {
     addCategory: 'Добавить категорию',
     editCategory: 'Редактировать категорию',
     deleteCategory: 'Удалить категорию',
-    noCategories: 'Категории не найдены'
+    noCategories: 'Категории не найдены',
+    viewProducts: 'Смотреть товары'
   },
   errors: {
     required: 'Это поле обязательно для заполнения',
@@ -79,7 +83,10 @@ const enTranslations = {
     required: 'Required field',
     minLength: 'Minimum {{count}} characters',
     positiveNumber: 'Must be a positive number',
-    duplicateName: 'Item with this name already exists'
+    duplicateName: 'Item with this name already exists',
+    selectCategory: 'Select category',
+    imageUrl: 'Image URL',
+    currency: 'RUB'
   },
   products: {
     title: 'Product Catalog',
@@ -94,7 +101,8 @@ const enTranslations = {
     addCategory: 'Add Category',
     editCategory: 'Edit Category',
     deleteCategory: 'Delete Category',
-    noCategories: 'No categories found'
+    noCategories: 'No categories found',
+    viewProducts: 'View Products'
   },
   errors: {
     required: 'This field is required',

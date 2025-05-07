@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useTranslation } from 'react-i18next';
+import { Link } from 'react-router-dom';
 import { 
   selectAllCategories, 
   selectCategoriesError,
@@ -9,6 +10,7 @@ import {
   deleteCategory,
   clearError 
 } from '../store/slices/categoriesSlice';
+import { setSelectedCategory } from '../store/slices/productsSlice';
 import Modal from '../components/Modal';
 
 const CategoriesPage = () => {
@@ -71,6 +73,10 @@ const CategoriesPage = () => {
     }
   };
 
+  const handleViewProducts = (categoryName) => {
+    dispatch(setSelectedCategory(categoryName));
+  };
+
   return (
     <div className="container py-5">
       <div className="d-flex justify-content-between align-items-center mb-4">
@@ -97,8 +103,15 @@ const CategoriesPage = () => {
                 <h5 className="card-title">{category.name}</h5>
                 <p className="card-text">{category.description}</p>
                 <div className="btn-group">
-                  <button
+                  <Link
+                    to="/catalog"
                     className="btn btn-outline-primary"
+                    onClick={() => handleViewProducts(category.name)}
+                  >
+                    {t('categories.viewProducts')}
+                  </Link>
+                  <button
+                    className="btn btn-outline-secondary"
                     onClick={() => handleOpenModal(category)}
                   >
                     {t('common.edit')}
