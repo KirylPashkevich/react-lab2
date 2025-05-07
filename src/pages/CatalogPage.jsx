@@ -197,6 +197,20 @@ const CatalogPage = () => {
                 <h5 className="card-title">{product.name}</h5>
                 <p className="card-text text-primary fw-bold">{product.price} {t('common.currency')}</p>
                 <p className="card-text text-muted">{product.category}</p>
+                <div className="d-flex align-items-center mb-2">
+                  <span className="badge bg-success me-2">{t('products.rating', { rating: '4.5' })}</span>
+                  <small className="text-muted">{t('products.reviews', { count: 128 })}</small>
+                </div>
+                <div className="progress mb-3" style={{ height: '5px' }}>
+                  <div 
+                    className="progress-bar bg-success" 
+                    role="progressbar" 
+                    style={{ width: '75%' }} 
+                    aria-valuenow="75" 
+                    aria-valuemin="0" 
+                    aria-valuemax="100"
+                  ></div>
+                </div>
               </div>
             </div>
           </div>

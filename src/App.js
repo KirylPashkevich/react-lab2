@@ -6,6 +6,7 @@ import Footer from './components/Footer';
 import HomePage from './pages/HomePage';
 import CatalogPage from './pages/CatalogPage';
 import AboutPage from './pages/AboutPage';
+import CategoriesPage from './pages/CategoriesPage';
 
 const AppContainer = styled.div`
   display: flex;
@@ -28,6 +29,7 @@ const App = () => {
             <Route path="/" element={<HomePage />} />
             <Route path="/catalog" element={<CatalogPage />} />
             <Route path="/about" element={<AboutPage />} />
+            <Route path="/categories" element={<CategoriesPage />} />
           </Routes>
         </MainContent>
         <Footer />

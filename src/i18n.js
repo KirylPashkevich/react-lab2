@@ -39,7 +39,9 @@ const ruTranslations = {
     editProduct: 'Редактировать товар',
     deleteProduct: 'Удалить товар',
     noProducts: 'Товары не найдены',
-    filterByCategory: 'Фильтр по категории'
+    filterByCategory: 'Фильтр по категории',
+    rating: '{{rating}} ★',
+    reviews: '({{count}} отзывов)'
   },
   categories: {
     title: 'Управление категориями',
@@ -94,7 +96,9 @@ const enTranslations = {
     editProduct: 'Edit Product',
     deleteProduct: 'Delete Product',
     noProducts: 'No products found',
-    filterByCategory: 'Filter by category'
+    filterByCategory: 'Filter by category',
+    rating: '{{rating}} ★',
+    reviews: '({{count}} reviews)'
   },
   categories: {
     title: 'Category Management',

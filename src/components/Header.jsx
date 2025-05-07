@@ -1,11 +1,10 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 const Header = () => {
   const { t, i18n } = useTranslation();
-  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
   const changeLanguage = (lng) => {
     i18n.changeLanguage(lng);
